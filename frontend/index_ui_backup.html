@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI CareerMate</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            margin-top: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .upload-box {
+            text-align: center;
+            padding: 30px;
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+
+        input {
+            margin: 15px;
+            max-width: 100%;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            background: #2563eb;
+            color: white;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        #result {
+            margin-top: 30px;
+        }
+
+        .card {
+            background: #f8fafc;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #2563eb;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 45px;
+            font-weight: bold;
+            color: #2563eb;
+            margin: 15px;
+        }
+
+        .score-message {
+            text-align: center;
+            font-size: 17px;
+            color: #555;
+        }
+
+        .skill {
+            display: inline-block;
+            background: #e0ecff;
+            padding: 8px 14px;
+            margin: 5px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .role {
+            display: block;
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-weight: bold;
+        }
+
+        .section-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            margin: 7px 0;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .present {
+            color: green;
+            font-weight: bold;
+        }
+
+        .missing {
+            color: red;
+            font-weight: bold;
+        }
+
+        .resume-text {
+            white-space: pre-wrap;
+            text-align: left;
+            line-height: 1.6;
+            max-height: 450px;
+            overflow-y: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .recommendation {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 12px 0;
+            border-radius: 10px;
+        }
+
+        .recommendation h3 {
+            margin-top: 0;
+            color: #2563eb;
+        }
+
+        .gap {
+            display: inline-block;
+            background: #ffe4e4;
+            color: #b91c1c;
+            padding: 8px 14px;
+            margin: 5px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .job {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 18px;
+            margin: 12px 0;
+            border-radius: 10px;
+        }
+
+        .job h3 {
+            margin-top: 0;
+            color: #2563eb;
+        }
+
+        .match {
+            font-size: 24px;
+            font-weight: bold;
+            color: green;
+        }
+
+        .matched {
+            color: green;
+        }
+
+        .job-missing {
+            color: red;
+        }
+
+        ul {
+            text-align: left;
+            line-height: 1.8;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                margin: 10px;
+                padding: 20px;
+                border-radius: 10px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .upload-box {
+                padding: 20px 10px;
+            }
+
+            input {
+                width: 100%;
+                margin: 15px 0;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .score {
+                font-size: 38px;
+            }
+
+            .section-row {
+                font-size: 14px;
+            }
+
+            .job {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>🚀 AI CareerMate</h1>
+
+    <p class="subtitle">
+        AI-powered Resume Analyzer & Career Assistant
+    </p>
+
+
+    <div class="upload-box">
+
+        <input
+            type="file"
+            id="resume"
+            accept=".pdf,application/pdf"
+        >
+
+        <br>
+
+        <button
+            type="button"
+            id="analyzeBtn"
+        >
+            Analyze Resume
+        </button>
+
+    </div>
+
+
+    <div id="result"></div>
+
+</div>
+
+
+<script>
+
+const fileInput =
+    document.getElementById("resume");
+
+const analyzeBtn =
+    document.getElementById("analyzeBtn");
+
+const result =
+    document.getElementById("result");
+
+
+analyzeBtn.addEventListener(
+    "click",
+    analyzeResume
+);
+
+
+// =====================================
+// ANALYZE RESUME
+// =====================================
+
+async function analyzeResume() {
+
+    const file =
+        fileInput.files[0];
+
+
+    // Check file
+    if (!file) {
+
+        result.innerHTML = `
+            <div class="card">
+                <p class="error">
+                    ❌ Please select your resume first.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    // Check PDF
+    if (
+        file.type !== "application/pdf" &&
+        !file.name.toLowerCase().endsWith(".pdf")
+    ) {
+
+        result.innerHTML = `
+            <div class="card">
+                <p class="error">
+                    ❌ Please upload a PDF file.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    // Disable button
+    analyzeBtn.disabled = true;
+
+    analyzeBtn.innerText =
+        "Analyzing...";
+
+
+    // Loading
+    result.innerHTML = `
+        <div class="card">
+            <p class="loading">
+                ⏳ Analyzing your resume...
+            </p>
+        </div>
+    `;
+
+
+    // FormData
+    const formData =
+        new FormData();
+
+    formData.append(
+        "file",
+        file
+    );
+
+
+    try {
+
+        // Backend request
+        const response =
+            await fetch(
+                "http://127.0.0.1:8000/analyze",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Server error: " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Backend response:",
+            data
+        );
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "Resume analysis failed."
+            );
+
+        }
+
+
+        // Display result
+        displayResult(data);
+
+
+    } catch (error) {
+
+        console.error(
+            "Analyze error:",
+            error
+        );
+
+
+        result.innerHTML = `
+
+            <div class="card">
+
+                <p class="error">
+
+                    ❌ ${escapeHtml(
+                        error.message
+                    )}
+
+                </p>
+
+
+                <p>
+
+                    Make sure backend is running:
+
+                    <br>
+
+                    <strong>
+                        http://127.0.0.1:8000
+                    </strong>
+
+                </p>
+
+            </div>
+
+        `;
+
+    } finally {
+
+        analyzeBtn.disabled = false;
+
+        analyzeBtn.innerText =
+            "Analyze Resume";
+
+    }
+
+}
+
+
+// =====================================
+// DISPLAY RESULT
+// =====================================
+
+function displayResult(data) {
+
+    const skills =
+        data.skills || [];
+
+
+    const jobRoles =
+        data.job_roles || [];
+
+
+    const suggestions =
+        data.suggestions || [];
+
+
+    const sections =
+        data.sections || {};
+
+
+    const resumeText =
+        data.text || "";
+
+
+    const wordCount =
+        data.word_count || 0;
+
+
+    const score =
+        data.score || 0;
+
+
+    const scoreMessage =
+        data.score_message || "";
+
+
+    const careerRecommendations =
+        data.career_recommendations || [];
+
+
+    const skillGap =
+        data.skill_gap || [];
+
+
+    // =====================================
+    // SKILLS
+    // =====================================
+
+    let skillsHTML = "";
+
+
+    skills.forEach(function(skill) {
+
+        skillsHTML += `
+            <span class="skill">
+                ${escapeHtml(skill)}
+            </span>
+        `;
+
+    });
+
+
+    if (!skillsHTML) {
+
+        skillsHTML =
+            "<p>No common technical skills detected.</p>";
+
+    }
+
+
+    // =====================================
+    // JOB ROLES
+    // =====================================
+
+    let rolesHTML = "";
+
+
+    jobRoles.forEach(function(role) {
+
+        rolesHTML += `
+            <div class="role">
+                🎯 ${escapeHtml(role)}
+            </div>
+        `;
+
+    });
+
+
+    if (!rolesHTML) {
+
+        rolesHTML =
+            "<p>No specific job role detected.</p>";
+
+    }
+
+
+    // =====================================
+    // SECTIONS
+    // =====================================
+
+    let sectionsHTML = "";
+
+
+    Object.keys(sections).forEach(
+        function(section) {
+
+            const exists =
+                sections[section];
+
+
+            sectionsHTML += `
+
+                <div class="section-row">
+
+                    <span>
+                        ${escapeHtml(section)}
+                    </span>
+
+                    <span class="${
+                        exists
+                            ? "present"
+                            : "missing"
+                    }">
+
+                        ${
+                            exists
+                                ? "✅ Present"
+                                : "❌ Missing"
+                        }
+
+                    </span>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    // =====================================
+    // SUGGESTIONS
+    // =====================================
+
+    let suggestionsHTML = "";
+
+
+    suggestions.forEach(
+        function(suggestion) {
+
+            suggestionsHTML += `
+                <li>
+                    ${escapeHtml(suggestion)}
+                </li>
+            `;
+
+        }
+    );
+
+
+    if (!suggestionsHTML) {
+
+        suggestionsHTML =
+            "<li>No additional suggestions.</li>";
+
+    }
+
+
+    // =====================================
+    // CAREER RECOMMENDATIONS
+    // =====================================
+
+    let careerHTML = "";
+
+
+    careerRecommendations.forEach(
+        function(item) {
+
+            let learnHTML = "";
+
+
+            if (item.learn) {
+
+                item.learn.forEach(
+                    function(skill) {
+
+                        learnHTML += `
+                            <li>
+                                ${escapeHtml(skill)}
+                            </li>
+                        `;
+
+                    }
+                );
+
+            }
+
+
+            careerHTML += `
+
+                <div class="recommendation">
+
+                    <h3>
+                        🚀 ${escapeHtml(
+                            item.role || ""
+                        )}
+                    </h3>
+
+                    <p>
+                        <strong>Why:</strong>
+                        ${escapeHtml(
+                            item.reason || ""
+                        )}
+                    </p>
+
+                    <strong>
+                        📚 Recommended Learning:
+                    </strong>
+
+                    <ul>
+                        ${learnHTML}
+                    </ul>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    if (!careerHTML) {
+
+        careerHTML =
+            "<p>No career recommendation available.</p>";
+
+    }
+
+
+    // =====================================
+    // SKILL GAP
+    // =====================================
+
+    let skillGapHTML = "";
+
+
+    skillGap.forEach(function(skill) {
+
+        skillGapHTML += `
+            <span class="gap">
+                ⚠️ ${escapeHtml(skill)}
+            </span>
+        `;
+
+    });
+
+
+    if (!skillGapHTML) {
+
+        skillGapHTML = `
+            <p>
+                ✅ No major skill gaps detected
+                for the recommended role.
+            </p>
+        `;
+
+    }
+
+
+    // =====================================
+    // FINAL RESULT
+    // =====================================
+
+    result.innerHTML = `
+
+        <!-- BASIC RESULT -->
+
+        <div class="card">
+
+            <h2>
+                ✅ Resume Analyzed Successfully!
+            </h2>
+
+            <p>
+
+                <strong>
+                    📄 File:
+                </strong>
+
+                ${escapeHtml(
+                    data.filename || ""
+                )}
+
+            </p>
+
+
+            <p>
+
+                <strong>
+                    📝 Words Extracted:
+                </strong>
+
+                ${wordCount}
+
+            </p>
+
+        </div>
+
+
+        <!-- SCORE -->
+
+        <div class="card">
+
+            <h2>
+                📊 Resume Score
+            </h2>
+
+            <div class="score">
+                ${score}/100
+            </div>
+
+            <p class="score-message">
+
+                ${escapeHtml(
+                    scoreMessage
+                )}
+
+            </p>
+
+        </div>
+
+
+        <!-- SKILLS -->
+
+        <div class="card">
+
+            <h2>
+                🧠 Detected Skills
+            </h2>
+
+            <div>
+                ${skillsHTML}
+            </div>
+
+        </div>
+
+
+        <!-- JOB ROLES -->
+
+        <div class="card">
+
+            <h2>
+                🎯 Recommended Job Roles
+            </h2>
+
+            ${rolesHTML}
+
+        </div>
+
+
+        <!-- CAREER RECOMMENDATIONS -->
+
+        <div class="card">
+
+            <h2>
+                🚀 Career Recommendations
+            </h2>
+
+            ${careerHTML}
+
+        </div>
+
+
+        <!-- SKILL GAP -->
+
+        <div class="card">
+
+            <h2>
+                🛠️ Skill Gap
+            </h2>
+
+            <p>
+                Skills you may need to improve:
+            </p>
+
+            <div>
+                ${skillGapHTML}
+            </div>
+
+        </div>
+
+
+        <!-- RESUME SECTIONS -->
+
+        <div class="card">
+
+            <h2>
+                📚 Resume Sections
+            </h2>
+
+            ${sectionsHTML}
+
+        </div>
+
+
+        <!-- SUGGESTIONS -->
+
+        <div class="card">
+
+            <h2>
+                💡 Resume Suggestions
+            </h2>
+
+            <ul>
+                ${suggestionsHTML}
+            </ul>
+
+        </div>
+
+
+        <!-- RESUME TEXT -->
+
+        <div class="card">
+
+            <h2>
+                📄 Extracted Resume Text
+            </h2>
+
+            <div class="resume-text">
+
+                ${
+                    resumeText
+                        ? escapeHtml(resumeText)
+                        : "No text could be extracted from this PDF."
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- JOB MATCHING BUTTON -->
+
+        <div class="card">
+
+            <h2>
+                💼 Job Matching
+            </h2>
+
+            <p>
+                Find jobs that match your resume skills.
+            </p>
+
+            <button
+                type="button"
+                onclick="findJobs()"
+                id="jobBtn"
+            >
+                🔎 Find Matching Jobs
+            </button>
+
+            <div id="jobResult"></div>
+
+        </div>
+
+    `;
+
+}
+
+
+// =====================================
+// JOB MATCHING
+// =====================================
+
+async function findJobs() {
+
+    const file =
+        fileInput.files[0];
+
+
+    if (!file) {
+
+        return;
+
+    }
+
+
+    const jobBtn =
+        document.getElementById("jobBtn");
+
+
+    const jobResult =
+        document.getElementById("jobResult");
+
+
+    jobBtn.disabled = true;
+
+    jobBtn.innerText =
+        "Finding Jobs...";
+
+
+    jobResult.innerHTML = `
+
+        <div class="card">
+
+            <p class="loading">
+                ⏳ Checking job matches...
+            </p>
+
+        </div>
+
+    `;
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "file",
+        file
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                "http://127.0.0.1:8000/job-match",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Job matching server error: " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "Job matching failed."
+            );
+
+        }
+
+
+        displayJobs(
+            data.jobs || []
+        );
+
+
+    } catch (error) {
+
+        jobResult.innerHTML = `
+
+            <div class="card">
+
+                <p class="error">
+
+                    ❌ ${escapeHtml(
+                        error.message
+                    )}
+
+                </p>
+
+            </div>
+
+        `;
+
+    } finally {
+
+        jobBtn.disabled = false;
+
+        jobBtn.innerText =
+            "🔎 Find Matching Jobs";
+
+    }
+
+}
+
+
+// =====================================
+// DISPLAY JOBS
+// =====================================
+
+function displayJobs(jobs) {
+
+    const jobResult =
+        document.getElementById("jobResult");
+
+
+    if (!jobs.length) {
+
+        jobResult.innerHTML = `
+            <div class="card">
+                <p>
+                    No matching jobs found.
+                </p>
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    let jobsHTML = "";
+
+
+    jobs.forEach(function(job) {
+
+        let matchedHTML = "";
+
+
+        (job.matched_skills || [])
+            .forEach(function(skill) {
+
+                matchedHTML += `
+                    <span class="skill">
+                        ✅ ${escapeHtml(skill)}
+                    </span>
+                `;
+
+            });
+
+
+        let missingHTML = "";
+
+
+        (job.missing_skills || [])
+            .forEach(function(skill) {
+
+                missingHTML += `
+                    <span class="gap">
+                        ❌ ${escapeHtml(skill)}
+                    </span>
+                `;
+
+            });
+
+
+        jobsHTML += `
+
+            <div class="job">
+
+                <h3>
+                    💼 ${escapeHtml(
+                        job.title || ""
+                    )}
+                </h3>
+
+
+                <p>
+
+                    <strong>
+                        🏢 Company:
+                    </strong>
+
+                    ${escapeHtml(
+                        job.company || ""
+                    )}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        📍 Location:
+                    </strong>
+
+                    ${escapeHtml(
+                        job.location || ""
+                    )}
+
+                </p>
+
+
+                <p class="match">
+
+                    ${job.match_percentage || 0}% Match
+
+                </p>
+
+
+                <p>
+                    <strong>
+                        ✅ Matched Skills:
+                    </strong>
+                </p>
+
+
+                <div>
+                    ${
+                        matchedHTML ||
+                        "No matching skills"
+                    }
+                </div>
+
+
+                <p>
+                    <strong>
+                        ⚠️ Missing Skills:
+                    </strong>
+                </p>
+
+
+                <div>
+                    ${
+                        missingHTML ||
+                        "No missing skills"
+                    }
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    jobResult.innerHTML = `
+
+        <div style="margin-top:20px;">
+
+            ${jobsHTML}
+
+        </div>
+
+    `;
+
+}
+
+
+// =====================================
+// ESCAPE HTML
+// =====================================
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+
+    div.textContent =
+        String(text);
+
+
+    return div.innerHTML;
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI CareerMate</title>
+<style>
+*{box-sizing:border-box}
+:root{--primary:#2563eb;--primary2:#4f46e5;--bg:#f5f7fb;--text:#172033;--muted:#64748b;--border:#e2e8f0;--card:#fff}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#eef4ff,#f8fafc);color:var(--text)}
+.container{width:min(1100px,calc(100% - 28px));margin:28px auto 50px}
+.header{text-align:center;margin-bottom:24px}
+.logo{display:inline-flex;align-items:center;gap:10px;font-size:32px;font-weight:800;margin-bottom:6px}
+.logo span{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border-radius:14px;padding:8px 12px}
+.subtitle{margin:0;color:var(--muted);font-size:16px}
+.upload-box{background:var(--card);border:2px dashed #b9c7e8;border-radius:20px;padding:34px 22px;text-align:center;box-shadow:0 12px 35px rgba(37,99,235,.08)}
+.upload-icon{font-size:48px}
+.upload-title{font-size:22px;font-weight:750;margin:10px 0 6px}
+.upload-help{color:var(--muted);margin:0 0 18px}
+input[type=file]{display:block;width:min(500px,100%);margin:0 auto 18px;padding:12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc}
+button{border:0;border-radius:11px;padding:13px 22px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 7px 18px rgba(37,99,235,.22);transition:.2s}
+button:hover{transform:translateY(-1px)}
+button:disabled{background:#94a3b8;box-shadow:none;cursor:not-allowed;transform:none}
+#result{margin-top:24px}
+.card{background:var(--card);padding:22px;margin-top:16px;border:1px solid var(--border);border-radius:16px;box-shadow:0 7px 24px rgba(15,23,42,.05)}
+.card h2{margin:0 0 15px;font-size:20px}
+.success-title{color:#15803d}
+.error{color:#dc2626;font-weight:700}
+.loading{text-align:center;font-size:17px;color:var(--muted)}
+.score-card{text-align:center}
+.score{font-size:56px;font-weight:850;color:var(--primary);margin:5px}
+.score-message{color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:15px;text-align:center}
+.stat strong{display:block;font-size:24px;color:var(--primary)}
+.stat span{font-size:13px;color:var(--muted)}
+.skills{display:flex;flex-wrap:wrap;gap:8px}
+.skill,.gap{display:inline-block;padding:8px 13px;border-radius:999px;font-size:14px}
+.skill{background:#e8f0ff;color:#1d4ed8}
+.gap{background:#fee2e2;color:#b91c1c}
+.role,.recommendation,.job{background:#fff;border:1px solid var(--border);border-radius:13px;padding:16px;margin:10px 0}
+.role{font-weight:750}
+.recommendation h3,.job h3{margin:0 0 8px;color:var(--primary)}
+.section-row{display:flex;justify-content:space-between;gap:10px;padding:12px 14px;margin:7px 0;background:#f8fafc;border:1px solid var(--border);border-radius:10px}
+.present{color:#15803d;font-weight:700}.missing{color:#dc2626;font-weight:700}
+.resume-text{white-space:pre-wrap;line-height:1.65;max-height:420px;overflow:auto;background:#f8fafc;padding:16px;border-radius:10px;border:1px solid var(--border)}
+.match{font-size:25px;font-weight:850;color:#15803d;margin:8px 0}
+.footer{text-align:center;color:var(--muted);font-size:13px;margin-top:25px}
+ul{text-align:left;line-height:1.8}
+@media(max-width:650px){
+ .container{width:min(100% - 18px,1100px);margin:14px auto 35px}
+ .logo{font-size:26px}.subtitle{font-size:14px}
+ .upload-box{padding:25px 14px}.upload-title{font-size:19px}
+ input[type=file]{font-size:13px}
+ button{width:100%}.card{padding:17px}
+ .stats{grid-template-columns:1fr}
+ .score{font-size:46px}.section-row{font-size:14px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <div class="logo"><span>🚀</span> AI CareerMate</div>
+    <p class="subtitle">AI-powered Resume Analyzer & Career Assistant</p>
+  </header>
+
+  <section class="upload-box">
+    <div class="upload-icon">📄</div>
+    <div class="upload-title">Upload Your Resume</div>
+    <p class="upload-help">Choose a PDF resume and let AI analyze your career profile.</p>
+    <input type="file" id="resume" accept=".pdf,application/pdf">
+    <button type="button" id="analyzeBtn">✨ Analyze Resume</button>
+  </section>
+
+  <div id="result"></div>
+  <div class="footer">AI CareerMate • Resume Analysis & Career Guidance</div>
+</div>
+
+<script>
+const fileInput=document.getElementById("resume");
+const analyzeBtn=document.getElementById("analyzeBtn");
+const result=document.getElementById("result");
+
+analyzeBtn.addEventListener("click",analyzeResume);
+
+async function analyzeResume(){
+  const file=fileInput.files[0];
+  if(!file){
+    result.innerHTML='<div class="card"><p class="error">❌ Please select your resume first.</p></div>';
+    return;
+  }
+  if(file.type!=="application/pdf"&&!file.name.toLowerCase().endsWith(".pdf")){
+    result.innerHTML='<div class="card"><p class="error">❌ Please upload a PDF file.</p></div>';
+    return;
+  }
+
+  analyzeBtn.disabled=true;
+  analyzeBtn.innerText="Analyzing...";
+  result.innerHTML='<div class="card"><p class="loading">⏳ Analyzing your resume...</p></div>';
+
+  const formData=new FormData();
+  formData.append("file",file);
+
+  try{
+    const response=await fetch("http://127.0.0.1:8000/analyze",{method:"POST",body:formData});
+    if(!response.ok) throw new Error("Server error: "+response.status);
+    const data=await response.json();
+    if(!data.success) throw new Error(data.message||"Resume analysis failed.");
+    displayResult(data);
+  }catch(error){
+    result.innerHTML='<div class="card"><p class="error">❌ '+escapeHtml(error.message)+'</p><p>Make sure backend is running at <strong>http://127.0.0.1:8000</strong></p></div>';
+  }finally{
+    analyzeBtn.disabled=false;
+    analyzeBtn.innerText="✨ Analyze Resume";
+  }
+}
+
+function displayResult(data){
+  const skills=data.skills||[];
+  const jobRoles=data.job_roles||[];
+  const suggestions=data.suggestions||[];
+  const sections=data.sections||{};
+  const resumeText=data.text||"";
+  const wordCount=data.word_count||0;
+  const score=data.score||0;
+  const scoreMessage=data.score_message||"";
+  const careerRecommendations=data.career_recommendations||[];
+  const skillGap=data.skill_gap||[];
+
+  const skillsHTML=skills.length?skills.map(s=>`<span class="skill">${escapeHtml(s)}</span>`).join(""):"<p>No common technical skills detected.</p>";
+  const rolesHTML=jobRoles.length?jobRoles.map(r=>`<div class="role">🎯 ${escapeHtml(r)}</div>`).join(""):"<p>No specific job role detected.</p>";
+
+  let sectionsHTML="";
+  Object.keys(sections).forEach(section=>{
+    const exists=sections[section];
+    sectionsHTML+=`<div class="section-row"><span>${escapeHtml(section)}</span><span class="${exists?"present":"missing"}">${exists?"✅ Present":"❌ Missing"}</span></div>`;
+  });
+
+  const suggestionsHTML=suggestions.length?suggestions.map(s=>`<li>${escapeHtml(s)}</li>`).join(""):"<li>No additional suggestions.</li>";
+
+  let careerHTML="";
+  careerRecommendations.forEach(item=>{
+    const learnHTML=(item.learn||[]).map(s=>`<li>${escapeHtml(s)}</li>`).join("");
+    careerHTML+=`<div class="recommendation"><h3>🚀 ${escapeHtml(item.role||"")}</h3><p><strong>Why:</strong> ${escapeHtml(item.reason||"")}</p><strong>📚 Recommended Learning:</strong><ul>${learnHTML}</ul></div>`;
+  });
+  if(!careerHTML) careerHTML="<p>No career recommendation available.</p>";
+
+  const skillGapHTML=skillGap.length?skillGap.map(s=>`<span class="gap">⚠️ ${escapeHtml(s)}</span>`).join(""):"<p>✅ No major skill gaps detected for the recommended role.</p>";
+
+  result.innerHTML=`
+    <div class="card">
+      <h2 class="success-title">✅ Resume Analyzed Successfully!</h2>
+      <div class="stats">
+        <div class="stat"><strong>${wordCount}</strong><span>Words Extracted</span></div>
+        <div class="stat"><strong>${skills.length}</strong><span>Skills Detected</span></div>
+        <div class="stat"><strong>${jobRoles.length}</strong><span>Career Roles</span></div>
+      </div>
+      <p><strong>📄 File:</strong> ${escapeHtml(data.filename||"")}</p>
+    </div>
+
+    <div class="card score-card">
+      <h2>📊 Resume Score</h2>
+      <div class="score">${score}/100</div>
+      <p class="score-message">${escapeHtml(scoreMessage)}</p>
+    </div>
+
+    <div class="card"><h2>🧠 Detected Skills</h2><div class="skills">${skillsHTML}</div></div>
+    <div class="card"><h2>🎯 Recommended Job Roles</h2>${rolesHTML}</div>
+    <div class="card"><h2>🚀 Career Recommendations</h2>${careerHTML}</div>
+    <div class="card"><h2>🛠️ Skill Gap</h2><p>Skills you may need to improve:</p><div class="skills">${skillGapHTML}</div></div>
+    <div class="card"><h2>📚 Resume Sections</h2>${sectionsHTML}</div>
+    <div class="card"><h2>💡 Resume Suggestions</h2><ul>${suggestionsHTML}</ul></div>
+    <div class="card"><h2>📄 Extracted Resume Text</h2><div class="resume-text">${resumeText?escapeHtml(resumeText):"No text could be extracted from this PDF."}</div></div>
+
+    <div class="card">
+      <h2>💼 Job Matching</h2>
+      <p>Find jobs that match your resume skills.</p>
+      <button type="button" onclick="findJobs()" id="jobBtn">🔎 Find Matching Jobs</button>
+      <div id="jobResult"></div>
+    </div>`;
+}
+
+async function findJobs(){
+  const file=fileInput.files[0];
+  if(!file)return;
+
+  const jobBtn=document.getElementById("jobBtn");
+  const jobResult=document.getElementById("jobResult");
+  jobBtn.disabled=true;
+  jobBtn.innerText="Finding Jobs...";
+  jobResult.innerHTML='<div class="card"><p class="loading">⏳ Checking job matches...</p></div>';
+
+  const formData=new FormData();
+  formData.append("file",file);
+
+  try{
+    const response=await fetch("http://127.0.0.1:8000/job-match",{method:"POST",body:formData});
+    if(!response.ok) throw new Error("Job matching server error: "+response.status);
+    const data=await response.json();
+    if(!data.success) throw new Error(data.message||"Job matching failed.");
+    displayJobs(data.jobs||[]);
+  }catch(error){
+    jobResult.innerHTML='<div class="card"><p class="error">❌ '+escapeHtml(error.message)+'</p></div>';
+  }finally{
+    jobBtn.disabled=false;
+    jobBtn.innerText="🔎 Find Matching Jobs";
+  }
+}
+
+function displayJobs(jobs){
+  const jobResult=document.getElementById("jobResult");
+  if(!jobs.length){
+    jobResult.innerHTML='<div class="card"><p>No matching jobs found.</p></div>';
+    return;
+  }
+
+  let jobsHTML="";
+  jobs.forEach(job=>{
+    const matchedHTML=(job.matched_skills||[]).map(s=>`<span class="skill">✅ ${escapeHtml(s)}</span>`).join("");
+    const missingHTML=(job.missing_skills||[]).map(s=>`<span class="gap">❌ ${escapeHtml(s)}</span>`).join("");
+    jobsHTML+=`
+      <div class="job">
+        <h3>💼 ${escapeHtml(job.title||"")}</h3>
+        <p><strong>🏢 Company:</strong> ${escapeHtml(job.company||"")}</p>
+        <p><strong>📍 Location:</strong> ${escapeHtml(job.location||"")}</p>
+        <p class="match">${job.match_percentage||0}% Match</p>
+        <p><strong>✅ Matched Skills:</strong></p>
+        <div class="skills">${matchedHTML||"No matching skills"}</div>
+        <p><strong>⚠️ Missing Skills:</strong></p>
+        <div class="skills">${missingHTML||"No missing skills"}</div>
+      </div>`;
+  });
+  jobResult.innerHTML=`<div style="margin-top:18px">${jobsHTML}</div>`;
+}
+
+function escapeHtml(text){
+  const div=document.createElement("div");
+  div.textContent=String(text);
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>
