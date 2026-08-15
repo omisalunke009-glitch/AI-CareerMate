@@ -1,6 +1,45 @@
+# Environment
+.env
+.envrc
+.venv/
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Backend
 backend/.env
 backend/venv/
-venv/
 backend/__pycache__/
-*.pyc
 backend/temp_resume.pdf
+
+# Build / distribution
+build/
+dist/
+*.egg-info/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+tempCodeRunnerFile.py
