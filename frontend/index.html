@@ -4,591 +4,984 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI CareerMate</title>
-
-<style>
-*{box-sizing:border-box}
-:root{
-  --primary:#2563eb;
-  --primary2:#4f46e5;
-  --bg:#f5f7fb;
-  --text:#172033;
-  --muted:#64748b;
-  --border:#e2e8f0;
-  --card:#fff
-}
-body{
-  margin:0;
-  font-family:Inter,Arial,sans-serif;
-  background:linear-gradient(135deg,#eef4ff,#f8fafc);
-  color:var(--text)
-}
-.container{width:min(1100px,calc(100% - 28px));margin:28px auto 50px}
-.header{text-align:center;margin-bottom:24px}
-.logo{display:inline-flex;align-items:center;gap:10px;font-size:32px;font-weight:800;margin-bottom:6px}
-.logo span{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border-radius:14px;padding:8px 12px}
-.subtitle{margin:0;color:var(--muted);font-size:16px}
-
-.auth-box{
-  width:min(440px,calc(100% - 28px));
-  margin:35px auto;
-  padding:28px;
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:20px;
-  box-shadow:0 12px 35px rgba(37,99,235,.10)
-}
-.auth-box h2{margin:0 0 10px}
-.auth-box p{line-height:1.6;color:var(--muted)}
-.auth-box label{display:block;font-weight:650;margin:14px 0 7px}
-.auth-box input{
-  display:block;
-  width:100%;
-  padding:13px;
-  border:1px solid #cbd5e1;
-  border-radius:10px;
-  font-size:16px;
-  margin-bottom:14px
-}
-.auth-message{overflow-wrap:anywhere;font-size:14px}
-.auth-note{font-size:13px;color:var(--muted)}
-
-.upload-box{
-  background:var(--card);
-  border:2px dashed #b9c7e8;
-  border-radius:20px;
-  padding:34px 22px;
-  text-align:center;
-  box-shadow:0 12px 35px rgba(37,99,235,.08)
-}
-.upload-icon{font-size:48px}
-.upload-title{font-size:22px;font-weight:750;margin:10px 0 6px}
-.upload-help{color:var(--muted);margin:0 0 18px}
-input[type=file]{
-  display:block;
-  width:min(500px,100%);
-  margin:0 auto 18px;
-  padding:12px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:#f8fafc
-}
-button{
-  border:0;
-  border-radius:11px;
-  padding:13px 22px;
-  background:linear-gradient(135deg,var(--primary),var(--primary2));
-  color:#fff;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer;
-  box-shadow:0 7px 18px rgba(37,99,235,.22);
-  transition:.2s
-}
-button:hover{transform:translateY(-1px)}
-button:disabled{background:#94a3b8;box-shadow:none;cursor:not-allowed;transform:none}
-.secondary-btn{background:#64748b}
-#result{margin-top:24px}
-.card{
-  background:var(--card);
-  padding:22px;
-  margin-top:16px;
-  border:1px solid var(--border);
-  border-radius:16px;
-  box-shadow:0 7px 24px rgba(15,23,42,.05)
-}
-.card h2{margin:0 0 15px;font-size:20px}
-.success-title{color:#15803d}
-.error{color:#dc2626;font-weight:700}
-.loading{text-align:center;font-size:17px;color:var(--muted)}
-.score-card{text-align:center}
-.score{font-size:56px;font-weight:850;color:var(--primary);margin:5px}
-.score-message{color:var(--muted);margin:0}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.stat{background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:15px;text-align:center}
-.stat strong{display:block;font-size:24px;color:var(--primary)}
-.stat span{font-size:13px;color:var(--muted)}
-.skills{display:flex;flex-wrap:wrap;gap:8px}
-.skill,.gap{display:inline-block;padding:8px 13px;border-radius:999px;font-size:14px}
-.skill{background:#e8f0ff;color:#1d4ed8}
-.gap{background:#fee2e2;color:#b91c1c}
-.role,.recommendation,.job{background:#fff;border:1px solid var(--border);border-radius:13px;padding:16px;margin:10px 0}
-.role{font-weight:750}
-.recommendation h3,.job h3{margin:0 0 8px;color:var(--primary)}
-.section-row{display:flex;justify-content:space-between;gap:10px;padding:12px 14px;margin:7px 0;background:#f8fafc;border:1px solid var(--border);border-radius:10px}
-.present{color:#15803d;font-weight:700}
-.missing{color:#dc2626;font-weight:700}
-.resume-text{white-space:pre-wrap;line-height:1.65;max-height:420px;overflow:auto;background:#f8fafc;padding:16px;border-radius:10px;border:1px solid var(--border)}
-.match{font-size:25px;font-weight:850;color:#15803d;margin:8px 0}
-.footer{text-align:center;color:var(--muted);font-size:13px;margin-top:25px}
-ul{text-align:left;line-height:1.8}
-
-@media(max-width:650px){
-  .container{width:min(100% - 18px,1100px);margin:14px auto 35px}
-  .logo{font-size:26px}
-  .subtitle{font-size:14px}
-  .upload-box{padding:25px 14px}
-  .upload-title{font-size:19px}
-  input[type=file]{font-size:13px}
-  button{max-width:100%}
-  .auth-box button{width:100%}
-  .card{padding:17px}
-  .stats{grid-template-columns:1fr}
-  .score{font-size:46px}
-  .section-row{font-size:14px}
-}
-</style>
-</head>
-
-<body>
-
-<!-- EMAIL OTP LOGIN -->
-<section class="auth-box" id="loginPanel">
-  <div class="logo"><span>🚀</span> AI CareerMate</div>
-  <h2>Email Login</h2>
-  <p>Enter your email address. We will send you a verification code.</p>
-
-  <div id="emailStep">
-    <label for="loginEmail">Email address</label>
-    <input
-      type="email"
-      id="loginEmail"
-      placeholder="you@example.com"
-      autocomplete="email"
-      required
-    >
-    <button type="button" id="sendOtpBtn">Send OTP</button>
-  </div>
-
-  <div id="otpStep" hidden>
-    <p id="sentMessage"></p>
-    <label for="loginOtp">Verification code</label>
-    <input
-      type="text"
-      id="loginOtp"
-      placeholder="Enter email OTP"
-      inputmode="numeric"
-      autocomplete="one-time-code"
-      maxlength="10"
-    >
-    <button type="button" id="verifyOtpBtn">Verify & Login</button>
-    <button type="button" id="backEmailBtn" class="secondary-btn" style="margin-top:10px">
-      Change Email
-    </button>
-  </div>
-
-  <p id="authMessage" class="auth-message" role="status" aria-live="polite"></p>
-  <p class="auth-note">Secure login requires access to your email inbox.</p>
-</section>
-
-<!-- EXISTING APP: SHOWN AFTER LOGIN -->
-<div class="container" id="appContent" hidden>
-
-  <header class="header">
-    <div class="logo"><span>🚀</span> AI CareerMate</div>
-    <p class="subtitle">AI-powered Resume Analyzer & Career Assistant</p>
-  </header>
-
-  <div style="text-align:right;margin-bottom:15px">
-    <button type="button" id="logoutBtn" class="secondary-btn">Logout</button>
-  </div>
-
-  <section class="upload-box">
-    <div class="upload-icon">📄</div>
-    <div class="upload-title">Upload Your Resume</div>
-    <p class="upload-help">Choose a PDF resume and let AI analyze your career profile.</p>
-    <input type="file" id="resume" accept=".pdf,application/pdf">
-    <button type="button" id="analyzeBtn">✨ Analyze Resume</button>
-  </section>
-
-  <div id="result"></div>
-  <div class="footer">AI CareerMate • Resume Analysis & Career Guidance</div>
-</div>
+<title>AI CareerMate | Career Dashboard</title>
+<meta name="theme-color" content="#2563eb">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-// ============================================
-// SUPABASE CONFIGURATION
-// ============================================
-const SUPABASE_URL = "https://wwfyslwoubihmaxnntso.supabase.co";
+<style>
+:root {
+  --primary:#2563eb;
+  --primary-dark:#1d4ed8;
+  --bg:#f5f8ff;
+  --card:#ffffff;
+  --text:#172033;
+  --muted:#718096;
+  --border:#e5eaf3;
+  --green:#15803d;
+  --shadow:0 10px 35px rgba(27,54,93,.07);
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+button,input,select {font:inherit}
+button {cursor:pointer}
+.hidden {display:none!important}
+.muted {color:var(--muted)}
+.small {font-size:13px}
+.brand {display:flex;align-items:center;gap:11px;font-weight:800;font-size:20px}
+.logo {
+  width:42px;height:42px;border-radius:13px;
+  display:grid;place-items:center;color:white;
+  background:linear-gradient(135deg,#2563eb,#6366f1);
+  font-size:22px;font-weight:800;
+}
+.primary-btn {
+  border:0;background:var(--primary);color:white;
+  padding:12px 18px;border-radius:11px;font-weight:700;
+  transition:.2s;
+}
+.primary-btn:hover {background:var(--primary-dark);transform:translateY(-1px)}
+.secondary-btn {
+  background:white;border:1px solid var(--border);
+  padding:11px 15px;border-radius:10px;font-weight:600;color:var(--text)
+}
+input,select {
+  width:100%;padding:13px 14px;border:1px solid var(--border);
+  border-radius:10px;background:white;outline:none;
+}
+input:focus,select:focus {border-color:var(--primary);box-shadow:0 0 0 3px #2563eb18}
+label {display:block;font-size:13px;font-weight:700;margin:0 0 8px}
+.notice {font-size:13px;margin-top:14px;line-height:1.6}
+.success {color:var(--green)}
+.error {color:#dc2626}
 
-// Replace with your project's PUBLIC PUBLISHABLE key.
-// Never put a service_role or secret key in frontend code.
+/* LOGIN */
+#loginPage {
+  min-height:100vh;display:grid;grid-template-columns:1fr 440px;
+  gap:40px;align-items:center;padding:50px max(6%,calc((100vw - 1250px)/2));
+  background:linear-gradient(125deg,#f7faff,#edf4ff);
+}
+.login-hero {max-width:670px}
+.eyebrow {
+  display:inline-block;padding:8px 12px;border-radius:30px;
+  color:var(--primary);background:#e8f0ff;font-weight:700;font-size:12px;
+}
+.login-hero h1 {font-size:clamp(38px,5vw,64px);line-height:1.08;letter-spacing:-2px;margin:24px 0}
+.login-hero h1 span {color:var(--primary)}
+.login-hero p {font-size:17px;color:var(--muted);line-height:1.8;max-width:550px}
+.feature-list {display:grid;gap:15px;margin-top:30px}
+.feature {display:flex;gap:13px;align-items:center;font-weight:600}
+.feature-icon {
+  width:40px;height:40px;display:grid;place-items:center;
+  border-radius:12px;background:white;box-shadow:var(--shadow)
+}
+.login-card {
+  padding:32px;background:white;border:1px solid var(--border);
+  border-radius:23px;box-shadow:var(--shadow)
+}
+.login-card h2 {margin:23px 0 8px;font-size:26px}
+.login-card .field {margin-top:20px}
+.login-card .primary-btn {width:100%;margin-top:18px}
+.otp-row {display:grid;grid-template-columns:1fr auto;gap:8px}
+.otp-row .secondary-btn {white-space:nowrap}
+.divider {height:1px;background:var(--border);margin:22px 0}
+
+/* APP */
+#appPage {min-height:100vh}
+.topbar {
+  height:74px;background:white;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;position:sticky;top:0;z-index:5;
+}
+.top-right {display:flex;align-items:center;gap:15px}
+.avatar {
+  width:39px;height:39px;border-radius:50%;display:grid;place-items:center;
+  background:#dbeafe;color:#1d4ed8;font-weight:800;
+}
+.app-layout {display:grid;grid-template-columns:245px minmax(0,1fr);min-height:calc(100vh - 74px)}
+.sidebar {padding:24px 15px;background:white;border-right:1px solid var(--border)}
+.nav-label {font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:#9aa5b5;font-weight:800;padding:8px 12px 13px}
+.nav-btn {
+  width:100%;display:flex;align-items:center;gap:12px;text-align:left;
+  border:0;background:transparent;color:#68758a;padding:13px 14px;
+  border-radius:11px;margin-bottom:5px;font-weight:650;
+}
+.nav-btn:hover,.nav-btn.active {background:#edf4ff;color:var(--primary)}
+.nav-symbol {width:23px;text-align:center;font-size:17px}
+.sidebar-bottom {margin-top:35px;padding:15px;background:#f4f7ff;border-radius:13px;font-size:13px;line-height:1.7}
+.main {padding:30px;min-width:0;max-width:1500px;width:100%;margin:auto}
+.welcome {
+  padding:31px;border-radius:20px;color:white;
+  background:linear-gradient(115deg,#1d4ed8,#4f46e5);
+  display:flex;justify-content:space-between;align-items:center;gap:20px;
+  overflow:hidden;position:relative;
+}
+.welcome h1 {font-size:clamp(25px,3vw,35px);margin:0 0 10px}
+.welcome p {margin:0;color:#e0e7ff;line-height:1.7}
+.welcome-art {font-size:70px;opacity:.9;padding:0 20px}
+.section-heading {display:flex;justify-content:space-between;align-items:center;gap:15px;margin:28px 0 16px}
+.section-heading h2 {margin:0;font-size:20px}
+.stats {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin-top:22px}
+.stat-card,.panel,.result-card {
+  background:white;border:1px solid var(--border);border-radius:16px;
+  padding:21px;box-shadow:0 4px 18px rgba(27,54,93,.025);
+}
+.stat-top {display:flex;justify-content:space-between;align-items:center}
+.stat-icon {width:42px;height:42px;display:grid;place-items:center;background:#edf4ff;border-radius:12px;font-size:20px}
+.stat-value {font-size:27px;font-weight:800;margin-top:15px}
+.stat-label {font-size:13px;color:var(--muted);margin-top:5px}
+.content-grid {display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,1fr);gap:18px;margin-top:20px}
+.panel h3 {margin:0 0 7px;font-size:18px}
+.panel-desc {font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 20px}
+.upload-zone {
+  border:2px dashed #cbd8f0;border-radius:15px;padding:27px 18px;
+  text-align:center;background:#f9fbff;transition:.2s;
+}
+.upload-zone.dragover {border-color:var(--primary);background:#edf4ff}
+.upload-icon {font-size:35px;margin-bottom:10px}
+.upload-zone h4 {margin:0 0 8px;font-size:16px}
+.upload-zone p {margin:0 0 16px;font-size:13px;color:var(--muted)}
+.file-name {font-size:13px;color:var(--primary);margin-top:12px;overflow-wrap:anywhere}
+.upload-actions {display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.upload-actions input {max-width:245px;padding:8px;font-size:12px}
+.tool-row {
+  display:flex;align-items:flex-start;gap:13px;padding:14px 0;
+  border-bottom:1px solid var(--border)
+}
+.tool-row:last-child {border-bottom:0}
+.tool-icon {width:40px;height:40px;flex-shrink:0;border-radius:11px;background:#f0f4ff;display:grid;place-items:center}
+.tool-row strong {display:block;font-size:14px;margin-bottom:5px}
+.tool-row span {font-size:12px;line-height:1.6;color:var(--muted)}
+.result-wrap {margin-top:24px}
+.result-header {display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:15px}
+.result-header h2 {margin:0;font-size:21px}
+.result-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.result-card h3 {font-size:16px;margin:0 0 13px}
+.score {font-size:38px;color:var(--primary);font-weight:850}
+.pill {
+  display:inline-block;padding:6px 10px;border-radius:30px;background:#edf4ff;
+  color:#1d4ed8;font-size:12px;font-weight:650;margin:4px 4px 0 0
+}
+.pill.green {background:#dcfce7;color:#166534}
+.pill.orange {background:#fff7ed;color:#9a3412}
+.data-list {padding-left:19px;margin:8px 0;color:#4b5563;line-height:1.8;font-size:13px}
+pre {white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow:auto;font-size:12px;line-height:1.7;background:#f7f9fc;padding:15px;border-radius:10px}
+.full-span {grid-column:1/-1}
+.jobs-toolbar {display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin:20px 0}
+.jobs-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.job-card {background:white;border:1px solid var(--border);border-radius:15px;padding:20px}
+.job-card h3 {margin:0 0 7px;font-size:17px}
+.job-company {color:var(--muted);font-size:13px;margin-bottom:14px}
+.job-meta {display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.job-meta span {font-size:12px;padding:6px 9px;background:#f3f6fb;border-radius:7px}
+.empty-state {padding:36px 20px;text-align:center;color:var(--muted);background:white;border:1px dashed #cbd5e1;border-radius:15px;line-height:1.8}
+.loading {display:flex;align-items:center;gap:10px;color:var(--primary);font-size:14px;margin-top:15px}
+.spinner {width:18px;height:18px;border:2px solid #bfdbfe;border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin {to{transform:rotate(360deg)}}
+.page-title {font-size:30px;margin:0 0 8px}
+.page-subtitle {color:var(--muted);line-height:1.7;margin:0 0 25px}
+.footer {text-align:center;color:#9aa5b5;font-size:12px;padding:28px}
+#toast {position:fixed;bottom:22px;right:22px;max-width:350px;padding:14px 18px;background:#172033;color:white;border-radius:12px;box-shadow:var(--shadow);z-index:20;font-size:13px}
+@media(max-width:950px) {
+  #loginPage {grid-template-columns:1fr;padding:30px 20px}
+  .login-hero {margin:auto}
+  .login-card {width:100%;max-width:480px;margin:auto}
+  .app-layout {grid-template-columns:78px minmax(0,1fr)}
+  .sidebar {padding:18px 8px}
+  .nav-btn {justify-content:center;padding:13px 4px}
+  .nav-btn .nav-text,.nav-label,.sidebar-bottom {display:none}
+  .content-grid {grid-template-columns:1fr}
+}
+@media(max-width:620px) {
+  .topbar {padding:0 14px;height:65px}
+  .brand {font-size:16px;gap:8px}
+  .logo {width:35px;height:35px}
+  .top-right {gap:8px}
+  .top-right .secondary-btn {padding:9px;font-size:12px}
+  .app-layout {grid-template-columns:1fr}
+  .sidebar {
+    position:sticky;top:65px;z-index:4;border-right:0;border-bottom:1px solid var(--border);
+    display:flex;overflow-x:auto;padding:8px;background:white
+  }
+  .nav-btn {min-width:64px;margin:0;flex-direction:column;gap:3px;font-size:10px}
+  .nav-btn .nav-text {display:block}
+  .nav-symbol {font-size:18px}
+  .main {padding:17px 13px}
+  .welcome {padding:23px}
+  .welcome-art {display:none}
+  .stats {grid-template-columns:1fr}
+  .result-grid,.jobs-grid {grid-template-columns:1fr}
+  .jobs-toolbar {grid-template-columns:1fr}
+  .login-card {padding:24px}
+  .login-hero h1 {letter-spacing:-1px}
+  .full-span {grid-column:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<section id="loginPage">
+  <div class="login-hero">
+    <div class="brand">
+      <div class="logo">C</div>
+      <span>AI CareerMate</span>
+    </div>
+    <div style="margin-top:44px">
+      <span class="eyebrow">✦ YOUR AI CAREER ASSISTANT</span>
+      <h1>Build your future.<br><span>One step at a time.</span></h1>
+      <p>Analyze your resume, discover your strengths, identify skill gaps, and explore career opportunities from one simple dashboard.</p>
+      <div class="feature-list">
+        <div class="feature"><div class="feature-icon">📄</div><span>AI-powered resume analysis</span></div>
+        <div class="feature"><div class="feature-icon">🎯</div><span>Job matching and skill insights</span></div>
+        <div class="feature"><div class="feature-icon">🚀</div><span>Personal career development</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-card">
+    <div class="brand">
+      <div class="logo">C</div>
+      <span>Welcome back!</span>
+    </div>
+    <h2>Sign in to continue</h2>
+    <p class="muted" style="font-size:14px;line-height:1.7">Enter your email address. We'll send you a verification code.</p>
+
+    <form id="emailForm">
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+      </div>
+      <button class="primary-btn" id="sendOtpBtn" type="submit">Send verification code →</button>
+    </form>
+
+    <form id="otpForm" class="hidden">
+      <div class="divider"></div>
+      <p class="small muted">Enter the verification code sent to <strong id="emailLabel"></strong>.</p>
+      <div class="field">
+        <label for="otp">Verification code</label>
+        <input id="otp" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter OTP" required>
+      </div>
+      <button class="primary-btn" id="verifyOtpBtn" type="submit">Verify and sign in</button>
+      <button class="secondary-btn" id="resendOtpBtn" type="button" style="width:100%;margin-top:10px">Send code again</button>
+    </form>
+    <p id="authMessage" class="notice" role="status"></p>
+    <div class="divider"></div>
+    <p class="small muted">Your career workspace, all in one place.</p>
+  </div>
+</section>
+
+<!-- MAIN APPLICATION -->
+<section id="appPage" class="hidden">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">C</div>
+      <span>AI CareerMate</span>
+    </div>
+    <div class="top-right">
+      <span class="small muted" id="headerEmail"></span>
+      <div class="avatar" id="avatar">U</div>
+      <button class="secondary-btn" id="logoutBtn">Log out</button>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="nav-label">Workspace</div>
+      <button class="nav-btn active" data-page="overview"><span class="nav-symbol">▦</span><span class="nav-text">Overview</span></button>
+      <button class="nav-btn" data-page="jobs"><span class="nav-symbol">⌕</span><span class="nav-text">Find Jobs</span></button>
+      <button class="nav-btn" data-page="insights"><span class="nav-symbol">◈</span><span class="nav-text">Career Insights</span></button>
+      <div class="sidebar-bottom">
+        <strong>💡 Career tip</strong><br>
+        Keep your resume updated with relevant skills and measurable achievements.
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- OVERVIEW -->
+      <section id="overviewView">
+        <div class="welcome">
+          <div>
+            <h1>Welcome back, <span id="welcomeName">there</span>! 👋</h1>
+            <p>Your next career opportunity starts here.<br>Let's make your skills stand out.</p>
+          </div>
+          <div class="welcome-art">🚀</div>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-top"><span class="muted small">Resume status</span><span class="stat-icon">📄</span></div>
+            <div class="stat-value" id="resumeStatus">Not analyzed</div>
+            <div class="stat-label">Upload your resume to get started</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><span class="muted small">Skills identified</span><span class="stat-icon">⚡</span></div>
+            <div class="stat-value" id="skillsCount">—</div>
+            <div class="stat-label">From your latest analysis</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><span class="muted small">Job matches</span><span class="stat-icon">🎯</span></div>
+            <div class="stat-value" id="jobCount">—</div>
+            <div class="stat-label">Matches returned by your backend</div>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <div class="panel">
+            <h3>Analyze your resume</h3>
+            <p class="panel-desc">Upload your resume and get AI-powered feedback, skills, career suggestions, and job matching.</p>
+            <div class="upload-zone" id="dropZone">
+              <div class="upload-icon">☁️</div>
+              <h4>Upload your resume</h4>
+              <p>Choose a PDF resume from your device.</p>
+              <div class="upload-actions">
+                <input id="resumeFile" type="file" accept=".pdf,application/pdf">
+              </div>
+              <div id="fileName" class="file-name"></div>
+              <button class="primary-btn" id="analyzeBtn" style="margin-top:18px">Analyze Resume →</button>
+              <div id="analyzeLoading" class="loading hidden"><span class="spinner"></span> Analyzing your resume...</div>
+              <p id="analyzeMessage" class="notice" role="status"></p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Your career toolkit</h3>
+            <p class="panel-desc">Tools to help you prepare for your next opportunity.</p>
+            <div class="tool-row">
+              <div class="tool-icon">🎯</div>
+              <div><strong>Find matching jobs</strong><span>Explore job matches based on your resume.</span><br><button class="secondary-btn" style="margin-top:10px" id="findJobsBtn">Find Jobs →</button></div>
+            </div>
+            <div class="tool-row">
+              <div class="tool-icon">📈</div>
+              <div><strong>Career insights</strong><span>Review skills, improvement areas, and career recommendations.</span><br><button class="secondary-btn" style="margin-top:10px" id="insightsBtn">View Insights →</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="analysisResults" class="result-wrap hidden">
+          <div class="result-header">
+            <h2>Resume analysis results</h2>
+            <button class="secondary-btn" id="analyzeAgainBtn">Analyze another resume</button>
+          </div>
+          <div id="analysisCards" class="result-grid"></div>
+        </div>
+      </section>
+
+      <!-- JOBS -->
+      <section id="jobsView" class="hidden">
+        <h1 class="page-title">Find Jobs 🎯</h1>
+        <p class="page-subtitle">Review the job matches returned by your AI CareerMate backend.</p>
+        <div class="panel">
+          <h3>Job matching</h3>
+          <p class="panel-desc">Analyze your resume first. Then request job matches from the backend.</p>
+          <button class="primary-btn" id="loadJobsBtn">Find matching jobs →</button>
+          <div id="jobsLoading" class="loading hidden"><span class="spinner"></span> Finding job matches...</div>
+          <p id="jobsMessage" class="notice" role="status"></p>
+        </div>
+        <div id="jobsContent" class="hidden">
+          <div class="jobs-toolbar">
+            <input id="jobSearch" placeholder="Search job title, company, or skills">
+            <select id="locationFilter"><option value="">All locations</option></select>
+            <select id="matchFilter">
+              <option value="">All match scores</option>
+              <option value="80">80% and above</option>
+              <option value="60">60% and above</option>
+              <option value="40">40% and above</option>
+            </select>
+          </div>
+          <div id="jobsGrid" class="jobs-grid"></div>
+        </div>
+      </section>
+
+      <!-- INSIGHTS -->
+      <section id="insightsView" class="hidden">
+        <h1 class="page-title">Career Insights ◈</h1>
+        <p class="page-subtitle">Understand your current skills and identify opportunities to improve.</p>
+        <div id="insightsContent" class="result-grid">
+          <div class="empty-state full-span">Analyze your resume first to view your career insights.</div>
+        </div>
+      </section>
+
+      <div class="footer">AI CareerMate · Your personal career companion</div>
+    </main>
+  </div>
+</section>
+
+<div id="toast" class="hidden" role="status"></div>
+
+<script>
+"use strict";
+
+/* Supabase authentication configuration */
+const SUPABASE_URL = "https://wwfyslwoubihmaxnntso.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_cbbZUb_qk178Ac6zAuCy1A_D6rU0YXy";
 
-if (!window.supabase) {
-  document.getElementById("authMessage").textContent =
-    "Could not load the login service. Check your internet connection and refresh.";
-  throw new Error("Supabase client library did not load.");
-}
+/* Existing FastAPI backend */
+const API_BASE = "https://ai-careermate.onrender.com";
 
-if (
-  !SUPABASE_PUBLISHABLE_KEY ||
-  SUPABASE_PUBLISHABLE_KEY === "sb_publishable_cbbZUb_qk178Ac6zAuCy1A_D6rU0YXy"
-) {
-  document.getElementById("authMessage").textContent =
-    "Setup required: add your Supabase Publishable key in the code.";
-}
-
+const $ = id => document.getElementById(id);
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
 
-const loginPanel = document.getElementById("loginPanel");
-const appContent = document.getElementById("appContent");
-const emailStep = document.getElementById("emailStep");
-const otpStep = document.getElementById("otpStep");
-const loginEmail = document.getElementById("loginEmail");
-const loginOtp = document.getElementById("loginOtp");
-const authMessage = document.getElementById("authMessage");
+let currentEmail = "";
+let selectedResume = null;
+let lastAnalysis = null;
+let matchedJobs = [];
 
-function showAuthMessage(message, isError = false) {
-  authMessage.textContent = message;
-  authMessage.style.color = isError ? "#dc2626" : "#15803d";
+function setMessage(id, message, type = "") {
+  const el = $(id);
+  el.textContent = message || "";
+  el.className = "notice" + (type ? " " + type : "");
 }
 
-function showLoggedIn(session) {
-  const loggedIn = Boolean(session);
-  loginPanel.hidden = loggedIn;
-  appContent.hidden = !loggedIn;
+function toast(message) {
+  const el = $("toast");
+  el.textContent = message;
+  el.classList.remove("hidden");
+  clearTimeout(toast.timeout);
+  toast.timeout = setTimeout(() => el.classList.add("hidden"), 3500);
 }
 
-async function refreshLoginState() {
-  try {
-    const { data, error } = await supabaseClient.auth.getSession();
-    if (error) throw error;
-    showLoggedIn(data.session);
-  } catch (error) {
-    showLoggedIn(null);
-    showAuthMessage("Unable to check login status. Please refresh.", true);
-  }
+function setLoading(id, active) {
+  $(id).classList.toggle("hidden", !active);
 }
 
-// Send OTP to email
-document.getElementById("sendOtpBtn").addEventListener("click", async () => {
-  const email = loginEmail.value.trim();
-  const button = document.getElementById("sendOtpBtn");
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[char]);
+}
 
-  if (!email || !loginEmail.checkValidity()) {
-    showAuthMessage("Please enter a valid email address.", true);
-    loginEmail.focus();
-    return;
+function normalizeArray(value) {
+  if (Array.isArray(value)) return value;
+  if (typeof value === "string" && value.trim()) {
+    return value.split(/[,;\n]/).map(s => s.trim()).filter(Boolean);
+  }
+  return [];
+}
+
+function firstValue(object, keys, fallback = null) {
+  if (!object || typeof object !== "object") return fallback;
+  for (const key of keys) {
+    if (object[key] !== undefined && object[key] !== null) return object[key];
+  }
+  return fallback;
+}
+
+function formatLabel(key) {
+  return key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function displayValue(value) {
+  if (value === null || value === undefined || value === "") return "Not provided";
+  if (Array.isArray(value)) return value.map(v =>
+    typeof v === "object" ? JSON.stringify(v) : String(v)
+  ).join(", ");
+  if (typeof value === "object") return JSON.stringify(value, null, 2);
+  return String(value);
+}
+
+function renderValueCard(title, value) {
+  if (value === null || value === undefined || value === "") return "";
+  const items = normalizeArray(value);
+  let body;
+  if (items.length) {
+    body = '<div>' + items.map(item =>
+      '<span class="pill">' + escapeHTML(displayValue(item)) + '</span>'
+    ).join("") + '</div>';
+  } else {
+    body = '<p class="small" style="line-height:1.8;overflow-wrap:anywhere">' +
+      escapeHTML(displayValue(value)) + '</p>';
+  }
+  return '<div class="result-card"><h3>' + escapeHTML(title) + '</h3>' + body + '</div>';
+}
+
+function findSection(data, keys) {
+  return firstValue(data, keys, null);
+}
+
+function showAnalysis(data) {
+  lastAnalysis = data;
+  $("analysisResults").classList.remove("hidden");
+  $("resumeStatus").textContent = "Analyzed";
+
+  const skills = findSection(data, ["skills", "identified_skills", "technical_skills"]);
+  $("skillsCount").textContent = normalizeArray(skills).length || "—";
+
+  const cards = [];
+  const score = findSection(data, ["score", "resume_score", "overall_score"]);
+  if (score !== null) {
+    cards.push('<div class="result-card"><h3>Resume score</h3><div class="score">' +
+      escapeHTML(score) + (String(score).includes("%") ? "" : "/100") +
+      '</div><p class="small muted">Score provided by your resume analyzer.</p></div>');
   }
 
-  button.disabled = true;
-  showAuthMessage("Sending verification code...");
+  const sections = [
+    [["skills","identified_skills","technical_skills"],"Skills identified"],
+    [["job_roles","recommended_roles","suitable_roles"],"Recommended job roles"],
+    [["career_recommendations","recommendations","career_paths"],"Career recommendations"],
+    [["skill_gaps","missing_skills","skills_to_improve"],"Skill gaps to improve"],
+    [["resume_sections","sections"],"Resume sections"],
+    [["suggestions","improvements","recommendations_for_resume"],"Suggestions"]
+  ];
 
-  try {
-    const { error } = await supabaseClient.auth.signInWithOtp({
-      email: email,
-      options: {
-        shouldCreateUser: true
-      }
-    });
+  sections.forEach(([keys,title]) => {
+    const value = findSection(data, keys);
+    if (value !== null) cards.push(renderValueCard(title, value));
+  });
 
-    if (error) throw error;
-
-    document.getElementById("sentMessage").textContent =
-      "If the email can be used, a verification code has been requested. Check your inbox and spam folder.";
-
-    emailStep.hidden = true;
-    otpStep.hidden = false;
-    loginOtp.value = "";
-    showAuthMessage("Check your email for the verification code.");
-    loginOtp.focus();
-  } catch (error) {
-    showAuthMessage(error.message || "Could not send the email OTP.", true);
-  } finally {
-    button.disabled = false;
-  }
-});
-
-// Verify OTP
-document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
-  const email = loginEmail.value.trim();
-  const token = loginOtp.value.trim();
-  const button = document.getElementById("verifyOtpBtn");
-
-  if (!email || !token) {
-    showAuthMessage("Enter your email and the code received by email.", true);
-    return;
+  const extractedText = findSection(data, [
+    "text","extracted_text","resume_text","full_text"
+  ]);
+  if (extractedText) {
+    cards.push('<div class="result-card full-span"><h3>Extracted resume text</h3><details><summary class="small" style="cursor:pointer">Show extracted text</summary><pre>' +
+      escapeHTML(extractedText) + '</pre></details></div>');
   }
 
-  button.disabled = true;
-  showAuthMessage("Verifying code...");
-
-  try {
-    const { data, error } = await supabaseClient.auth.verifyOtp({
-      email: email,
-      token: token,
-      type: "email"
-    });
-
-    if (error) throw error;
-
-    if (!data.session) {
-      throw new Error("Verification completed but no session was returned. Please try again.");
-    }
-
-    loginOtp.value = "";
-    showAuthMessage("Login successful!");
-    showLoggedIn(data.session);
-  } catch (error) {
-    showAuthMessage(error.message || "Invalid or expired OTP.", true);
-  } finally {
-    button.disabled = false;
+  if (!cards.length) {
+    cards.push('<div class="result-card full-span"><h3>Analysis response</h3><pre>' +
+      escapeHTML(JSON.stringify(data, null, 2)) + '</pre></div>');
   }
-});
 
-// Return to email step
-document.getElementById("backEmailBtn").addEventListener("click", () => {
-  otpStep.hidden = true;
-  emailStep.hidden = false;
-  loginOtp.value = "";
-  showAuthMessage("");
-  loginEmail.focus();
-});
+  $("analysisCards").innerHTML = cards.join("");
+  renderInsights(data);
+  toast("Resume analysis completed.");
+  $("analysisResults").scrollIntoView({behavior:"smooth", block:"start"});
+}
 
-// Logout
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  const button = document.getElementById("logoutBtn");
-  button.disabled = true;
-
-  try {
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) throw error;
-
-    emailStep.hidden = false;
-    otpStep.hidden = true;
-    loginOtp.value = "";
-    showAuthMessage("You have logged out.");
-    showLoggedIn(null);
-  } catch (error) {
-    showAuthMessage(error.message || "Logout failed.", true);
-  } finally {
-    button.disabled = false;
-  }
-});
-
-// Keep the UI updated when Supabase session changes
-supabaseClient.auth.onAuthStateChange((_event, session) => {
-  showLoggedIn(session);
-});
-
-// ============================================
-// EXISTING RESUME ANALYZER
-// ============================================
-const fileInput = document.getElementById("resume");
-const analyzeBtn = document.getElementById("analyzeBtn");
-const result = document.getElementById("result");
-
-analyzeBtn.addEventListener("click", analyzeResume);
+function renderInsights(data) {
+  const groups = [
+    [["skills","identified_skills","technical_skills"],"Your skills"],
+    [["skill_gaps","missing_skills","skills_to_improve"],"Skills to improve"],
+    [["career_recommendations","recommendations","career_paths"],"Career recommendations"],
+    [["job_roles","recommended_roles","suitable_roles"],"Suggested job roles"],
+    [["suggestions","improvements","recommendations_for_resume"],"Resume improvement tips"]
+  ];
+  const html = groups.map(([keys,title]) => {
+    const value = findSection(data, keys);
+    return value === null ? "" : renderValueCard(title, value);
+  }).filter(Boolean);
+  $("insightsContent").innerHTML = html.length
+    ? html.join("")
+    : '<div class="empty-state full-span">No separate career insights were returned. Review your analysis results for more information.</div>';
+}
 
 async function analyzeResume() {
-  const file = fileInput.files[0];
-
-  if (!file) {
-    result.innerHTML = '<div class="card"><p class="error">❌ Please select your resume first.</p></div>';
+  if (!selectedResume) {
+    setMessage("analyzeMessage", "Please select a PDF resume first.", "error");
     return;
   }
 
-  if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
-    result.innerHTML = '<div class="card"><p class="error">❌ Please upload a PDF file.</p></div>';
+  if (selectedResume.type && selectedResume.type !== "application/pdf") {
+    setMessage("analyzeMessage", "Please upload a PDF file.", "error");
     return;
   }
 
-  analyzeBtn.disabled = true;
-  analyzeBtn.innerText = "Analyzing...";
-  result.innerHTML = '<div class="card"><p class="loading">⏳ Analyzing your resume...</p></div>';
-
-  const formData = new FormData();
-  formData.append("file", file);
+  const btn = $("analyzeBtn");
+  btn.disabled = true;
+  setLoading("analyzeLoading", true);
+  setMessage("analyzeMessage", "");
 
   try {
-    const response = await fetch(
-      "https://ai-careermate.onrender.com/analyze",
-      { method: "POST", body: formData }
-    );
+    const formData = new FormData();
+    formData.append("file", selectedResume);
 
-    if (!response.ok) throw new Error("Server error: " + response.status);
+    const response = await fetch(API_BASE + "/analyze", {
+      method:"POST",
+      body:formData
+    });
 
-    const data = await response.json();
-    if (!data.success) throw new Error(data.message || "Resume analysis failed.");
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data.detail || data.message || "Resume analysis failed.");
+    }
+    if (data.success === false) {
+      throw new Error(data.message || data.error || "The resume could not be analyzed.");
+    }
 
-    displayResult(data);
+    showAnalysis(data);
+    setMessage("analyzeMessage", "Your resume was analyzed successfully.", "success");
   } catch (error) {
-    result.innerHTML =
-      '<div class="card"><p class="error">❌ ' +
-      escapeHtml(error.message) +
-      '</p><p>Make sure the backend is available at https://ai-careermate.onrender.com</p></div>';
+    console.error("Resume analysis error:", error);
+    setMessage(
+      "analyzeMessage",
+      "Could not analyze the resume. " + (error.message || "Please try again."),
+      "error"
+    );
   } finally {
-    analyzeBtn.disabled = false;
-    analyzeBtn.innerText = "✨ Analyze Resume";
+    btn.disabled = false;
+    setLoading("analyzeLoading", false);
   }
 }
 
-function displayResult(data) {
-  const skills = data.skills || [];
-  const jobRoles = data.job_roles || [];
-  const suggestions = data.suggestions || [];
-  const sections = data.sections || {};
-  const resumeText = data.text || "";
-  const wordCount = data.word_count || 0;
-  const score = data.score || 0;
-  const scoreMessage = data.score_message || "";
-  const careerRecommendations = data.career_recommendations || [];
-  const skillGap = data.skill_gap || [];
-
-  const skillsHTML = skills.length
-    ? skills.map(s => `<span class="skill">${escapeHtml(s)}</span>`).join("")
-    : "<p>No common technical skills detected.</p>";
-
-  const rolesHTML = jobRoles.length
-    ? jobRoles.map(r => `<div class="role">🎯 ${escapeHtml(r)}</div>`).join("")
-    : "<p>No specific job role detected.</p>";
-
-  let sectionsHTML = "";
-  Object.keys(sections).forEach(section => {
-    const exists = sections[section];
-    sectionsHTML += `<div class="section-row"><span>${escapeHtml(section)}</span><span class="${exists ? "present" : "missing"}">${exists ? "✅ Present" : "❌ Missing"}</span></div>`;
-  });
-
-  const suggestionsHTML = suggestions.length
-    ? suggestions.map(s => `<li>${escapeHtml(s)}</li>`).join("")
-    : "<li>No additional suggestions.</li>";
-
-  let careerHTML = "";
-  careerRecommendations.forEach(item => {
-    const learnHTML = (item.learn || [])
-      .map(s => `<li>${escapeHtml(s)}</li>`).join("");
-
-    careerHTML += `<div class="recommendation">
-      <h3>🚀 ${escapeHtml(item.role || "")}</h3>
-      <p><strong>Why:</strong> ${escapeHtml(item.reason || "")}</p>
-      <strong>📚 Recommended Learning:</strong>
-      <ul>${learnHTML}</ul>
-    </div>`;
-  });
-
-  if (!careerHTML) careerHTML = "<p>No career recommendation available.</p>";
-
-  const skillGapHTML = skillGap.length
-    ? skillGap.map(s => `<span class="gap">⚠️ ${escapeHtml(s)}</span>`).join("")
-    : "<p>✅ No major skill gaps detected for the recommended role.</p>";
-
-  result.innerHTML = `
-    <div class="card">
-      <h2 class="success-title">✅ Resume Analyzed Successfully!</h2>
-      <div class="stats">
-        <div class="stat"><strong>${wordCount}</strong><span>Words Extracted</span></div>
-        <div class="stat"><strong>${skills.length}</strong><span>Skills Detected</span></div>
-        <div class="stat"><strong>${jobRoles.length}</strong><span>Career Roles</span></div>
-      </div>
-      <p><strong>📄 File:</strong> ${escapeHtml(data.filename || "")}</p>
-    </div>
-
-    <div class="card score-card">
-      <h2>📊 Resume Score</h2>
-      <div class="score">${score}/100</div>
-      <p class="score-message">${escapeHtml(scoreMessage)}</p>
-    </div>
-
-    <div class="card"><h2>🧠 Detected Skills</h2><div class="skills">${skillsHTML}</div></div>
-    <div class="card"><h2>🎯 Recommended Job Roles</h2>${rolesHTML}</div>
-    <div class="card"><h2>🚀 Career Recommendations</h2>${careerHTML}</div>
-    <div class="card"><h2>🛠️ Skill Gap</h2><p>Skills you may need to improve:</p><div class="skills">${skillGapHTML}</div></div>
-    <div class="card"><h2>📚 Resume Sections</h2>${sectionsHTML}</div>
-    <div class="card"><h2>💡 Resume Suggestions</h2><ul>${suggestionsHTML}</ul></div>
-    <div class="card"><h2>📄 Extracted Resume Text</h2><div class="resume-text">${resumeText ? escapeHtml(resumeText) : "No text could be extracted from this PDF."}</div></div>
-
-    <div class="card">
-      <h2>💼 Job Matching</h2>
-      <p>Find jobs that match your resume skills.</p>
-      <button type="button" onclick="findJobs()" id="jobBtn">🔎 Find Matching Jobs</button>
-      <div id="jobResult"></div>
-    </div>`;
+function getJobField(job, keys, fallback = "") {
+  return firstValue(job, keys, fallback);
 }
 
-async function findJobs() {
-  const file = fileInput.files[0];
-  if (!file) return;
+function getMatchScore(job) {
+  const value = getJobField(job, [
+    "match_percentage","match_percent","match_score","match","score"
+  ], 0);
+  const num = Number(String(value).replace("%", ""));
+  return Number.isFinite(num) ? num : 0;
+}
 
-  const jobBtn = document.getElementById("jobBtn");
-  const jobResult = document.getElementById("jobResult");
+function displayJobs(data) {
+  const jobs = Array.isArray(data) ? data :
+    firstValue(data, ["jobs","matches","job_matches","results"], []);
 
-  jobBtn.disabled = true;
-  jobBtn.innerText = "Finding Jobs...";
-  jobResult.innerHTML = '<div class="card"><p class="loading">⏳ Checking job matches...</p></div>';
-
-  const formData = new FormData();
-  formData.append("file", file);
-
-  try {
-    const response = await fetch(
-      "https://ai-careermate.onrender.com/job-match",
-      { method: "POST", body: formData }
-    );
-
-    if (!response.ok) throw new Error("Job matching server error: " + response.status);
-
-    const data = await response.json();
-    if (!data.success) throw new Error(data.message || "Job matching failed.");
-
-    displayJobs(data.jobs || []);
-  } catch (error) {
-    jobResult.innerHTML =
-      '<div class="card"><p class="error">❌ ' +
-      escapeHtml(error.message) +
-      '</p></div>';
-  } finally {
-    jobBtn.disabled = false;
-    jobBtn.innerText = "🔎 Find Matching Jobs";
+  if (!Array.isArray(jobs)) {
+    matchedJobs = [];
+  } else {
+    matchedJobs = jobs;
   }
+
+  $("jobCount").textContent = matchedJobs.length;
+  $("jobsContent").classList.remove("hidden");
+  populateLocationFilter();
+  renderJobs();
 }
 
-function displayJobs(jobs) {
-  const jobResult = document.getElementById("jobResult");
+function populateLocationFilter() {
+  const select = $("locationFilter");
+  const oldValue = select.value;
+  const locations = [...new Set(matchedJobs.map(job =>
+    String(getJobField(job, ["location","city","job_location"], "")).trim()
+  ).filter(Boolean))].sort();
 
-  if (!jobs.length) {
-    jobResult.innerHTML = '<div class="card"><p>No matching jobs found.</p></div>';
+  select.innerHTML = '<option value="">All locations</option>' +
+    locations.map(location => '<option value="' + escapeHTML(location) + '">' +
+      escapeHTML(location) + '</option>').join("");
+
+  if (locations.includes(oldValue)) select.value = oldValue;
+}
+
+function renderJobs() {
+  const search = $("jobSearch").value.trim().toLowerCase();
+  const location = $("locationFilter").value;
+  const minimum = Number($("matchFilter").value || 0);
+
+  const filtered = matchedJobs.filter(job => {
+    const title = getJobField(job, ["title","job_title","role","position"], "");
+    const company = getJobField(job, ["company","company_name","employer"], "");
+    const skills = [
+      ...normalizeArray(getJobField(job, ["matched_skills","skills","required_skills"], [])),
+      ...normalizeArray(getJobField(job, ["missing_skills","skills_to_improve"], []))
+    ].join(" ");
+    const jobLocation = getJobField(job, ["location","city","job_location"], "");
+    const searchable = [title, company, skills, jobLocation].join(" ").toLowerCase();
+
+    return searchable.includes(search) &&
+      (!location || String(jobLocation) === location) &&
+      getMatchScore(job) >= minimum;
+  });
+
+  if (!matchedJobs.length) {
+    $("jobsGrid").innerHTML = '<div class="empty-state">No job matches were returned by the backend.<br>Try analyzing your resume again or check the backend response.</div>';
     return;
   }
 
-  let jobsHTML = "";
+  if (!filtered.length) {
+    $("jobsGrid").innerHTML = '<div class="empty-state">No jobs match these filters. Try changing your search.</div>';
+    return;
+  }
 
-  jobs.forEach(job => {
-    const matchedHTML = (job.matched_skills || [])
-      .map(s => `<span class="skill">✅ ${escapeHtml(s)}</span>`).join("");
+  $("jobsGrid").innerHTML = filtered.map(job => {
+    const title = getJobField(job, ["title","job_title","role","position"], "Job opportunity");
+    const company = getJobField(job, ["company","company_name","employer"], "Company not specified");
+    const location = getJobField(job, ["location","city","job_location"], "Location not specified");
+    const score = getMatchScore(job);
+    const matched = normalizeArray(getJobField(job, ["matched_skills","matching_skills"], []));
+    const missing = normalizeArray(getJobField(job, ["missing_skills","skills_to_improve"], []));
+    const description = getJobField(job, ["description","summary"], "");
+    const url = getJobField(job, ["url","job_url","apply_url","link"], "");
 
-    const missingHTML = (job.missing_skills || [])
-      .map(s => `<span class="gap">❌ ${escapeHtml(s)}</span>`).join("");
+    return '<article class="job-card">' +
+      '<h3>' + escapeHTML(title) + '</h3>' +
+      '<div class="job-company">' + escapeHTML(company) + '</div>' +
+      '<div class="job-meta"><span>📍 ' + escapeHTML(location) + '</span>' +
+      '<span>🎯 ' + escapeHTML(score) + '% match</span></div>' +
+      (description ? '<p class="small muted" style="line-height:1.7">' + escapeHTML(description) + '</p>' : '') +
+      (matched.length ? '<p class="small"><strong>Matched skills</strong></p>' +
+        matched.map(s => '<span class="pill green">' + escapeHTML(s) + '</span>').join("") : '') +
+      (missing.length ? '<p class="small" style="margin-top:14px"><strong>Skills to improve</strong></p>' +
+        missing.map(s => '<span class="pill orange">' + escapeHTML(s) + '</span>').join("") : '') +
+      (url && /^https?:\/\//i.test(String(url))
+        ? '<p style="margin-top:18px"><a href="' + escapeHTML(url) + '" target="_blank" rel="noopener noreferrer" class="primary-btn" style="display:inline-block;text-decoration:none">View job →</a></p>'
+        : '') +
+      '</article>';
+  }).join("");
+}
 
-    jobsHTML += `
-      <div class="job">
-        <h3>💼 ${escapeHtml(job.title || "")}</h3>
-        <p><strong>🏢 Company:</strong> ${escapeHtml(job.company || "")}</p>
-        <p><strong>📍 Location:</strong> ${escapeHtml(job.location || "")}</p>
-        <p class="match">${job.match_percentage || 0}% Match</p>
-        <p><strong>✅ Matched Skills:</strong></p>
-        <div class="skills">${matchedHTML || "No matching skills"}</div>
-        <p><strong>⚠️ Missing Skills:</strong></p>
-        <div class="skills">${missingHTML || "No missing skills"}</div>
-      </div>`;
+async function loadJobs() {
+  if (!selectedResume) {
+    setMessage("jobsMessage", "Upload a PDF resume on the Overview page first.", "error");
+    return;
+  }
+
+  setLoading("jobsLoading", true);
+  setMessage("jobsMessage", "");
+
+  try {
+    const formData = new FormData();
+    formData.append("file", selectedResume);
+
+    const response = await fetch(API_BASE + "/job-match", {
+      method:"POST",
+      body:formData
+    });
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.detail || data.message || "Job matching failed.");
+    }
+    if (data.success === false) {
+      throw new Error(data.message || data.error || "No job matches could be generated.");
+    }
+
+    displayJobs(data);
+    setMessage("jobsMessage", matchedJobs.length
+      ? "Job matches loaded successfully."
+      : "The backend did not return any job matches.", matchedJobs.length ? "success" : "");
+  } catch (error) {
+    console.error("Job matching error:", error);
+    setMessage("jobsMessage", "Could not load job matches. " + (error.message || "Please try again."), "error");
+  } finally {
+    setLoading("jobsLoading", false);
+  }
+}
+
+function showPage(page) {
+  const pages = {
+    overview:"overviewView",
+    jobs:"jobsView",
+    insights:"insightsView"
+  };
+
+  Object.values(pages).forEach(id => $(id).classList.add("hidden"));
+  $(pages[page] || pages.overview).classList.remove("hidden");
+
+  document.querySelectorAll(".nav-btn").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === page);
   });
-
-  jobResult.innerHTML = `<div style="margin-top:18px">${jobsHTML}</div>`;
 }
 
-function escapeHtml(value) {
-  const div = document.createElement("div");
-  div.textContent = String(value ?? "");
-  return div.innerHTML;
+function showApp(user) {
+  $("loginPage").classList.add("hidden");
+  $("appPage").classList.remove("hidden");
+
+  const email = user?.email || currentEmail || "";
+  $("headerEmail").textContent = email;
+  $("avatar").textContent = (email[0] || "U").toUpperCase();
+  $("welcomeName").textContent = email.includes("@")
+    ? email.split("@")[0].split(/[._-]/)[0]
+    : "there";
+
+  showPage("overview");
 }
 
-// Restore an existing session when the page loads
-refreshLoginState();
+function showLogin() {
+  $("appPage").classList.add("hidden");
+  $("loginPage").classList.remove("hidden");
+}
+
+async function sendOtp() {
+  const email = $("email").value.trim();
+  if (!email) {
+    setMessage("authMessage", "Please enter your email address.", "error");
+    return;
+  }
+
+  const button = $("sendOtpBtn");
+  button.disabled = true;
+  button.textContent = "Sending code...";
+
+  try {
+    const {error} = await supabaseClient.auth.signInWithOtp({
+      email,
+      options:{shouldCreateUser:true}
+    });
+
+    if (error) throw error;
+
+    currentEmail = email;
+    $("emailLabel").textContent = email;
+    $("otpForm").classList.remove("hidden");
+    setMessage("authMessage", "Verification code sent. Check your email inbox and spam folder.", "success");
+  } catch (error) {
+    console.error("Send OTP error:", error);
+    setMessage("authMessage", error.message || "Could not send verification code.", "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = "Send verification code →";
+  }
+}
+
+async function verifyOtp() {
+  const email = currentEmail || $("email").value.trim();
+  const token = $("otp").value.trim();
+
+  if (!email || !token) {
+    setMessage("authMessage", "Enter your email and verification code.", "error");
+    return;
+  }
+
+  const button = $("verifyOtpBtn");
+  button.disabled = true;
+  button.textContent = "Verifying...";
+
+  try {
+    const {data,error} = await supabaseClient.auth.verifyOtp({
+      email,
+      token,
+      type:"email"
+    });
+
+    if (error) throw error;
+    if (!data.user) throw new Error("Verification did not return a user.");
+
+    setMessage("authMessage", "Login successful.", "success");
+    showApp(data.user);
+  } catch (error) {
+    console.error("Verify OTP error:", error);
+    setMessage("authMessage", error.message || "Invalid or expired code. Please try again.", "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = "Verify and sign in";
+  }
+}
+
+async function resendOtp() {
+  if (!currentEmail) {
+    setMessage("authMessage", "Enter your email address first.", "error");
+    return;
+  }
+
+  $("resendOtpBtn").disabled = true;
+  try {
+    const {error} = await supabaseClient.auth.signInWithOtp({
+      email:currentEmail,
+      options:{shouldCreateUser:true}
+    });
+    if (error) throw error;
+    setMessage("authMessage", "A new verification code has been sent.", "success");
+  } catch (error) {
+    setMessage("authMessage", error.message || "Could not resend code.", "error");
+  } finally {
+    $("resendOtpBtn").disabled = false;
+  }
+}
+
+async function logout() {
+  const {error} = await supabaseClient.auth.signOut();
+  if (error) {
+    toast("Could not sign out: " + error.message);
+    return;
+  }
+  selectedResume = null;
+  lastAnalysis = null;
+  matchedJobs = [];
+  $("resumeFile").value = "";
+  $("fileName").textContent = "";
+  $("analysisResults").classList.add("hidden");
+  $("jobsContent").classList.add("hidden");
+  $("resumeStatus").textContent = "Not analyzed";
+  $("skillsCount").textContent = "—";
+  $("jobCount").textContent = "—";
+  currentEmail = "";
+  $("otp").value = "";
+  $("otpForm").classList.add("hidden");
+  setMessage("authMessage", "");
+  showLogin();
+}
+
+/* Events */
+$("emailForm").addEventListener("submit", event => {
+  event.preventDefault();
+  sendOtp();
+});
+
+$("otpForm").addEventListener("submit", event => {
+  event.preventDefault();
+  verifyOtp();
+});
+
+$("resendOtpBtn").addEventListener("click", resendOtp);
+$("logoutBtn").addEventListener("click", logout);
+$("analyzeBtn").addEventListener("click", analyzeResume);
+$("loadJobsBtn").addEventListener("click", loadJobs);
+$("findJobsBtn").addEventListener("click", () => showPage("jobs"));
+$("insightsBtn").addEventListener("click", () => showPage("insights"));
+
+$("analyzeAgainBtn").addEventListener("click", () => {
+  $("resumeFile").click();
+  $("resumeFile").scrollIntoView({behavior:"smooth",block:"center"});
+});
+
+document.querySelectorAll(".nav-btn").forEach(button => {
+  button.addEventListener("click", () => showPage(button.dataset.page));
+});
+
+$("resumeFile").addEventListener("change", event => {
+  selectedResume = event.target.files?.[0] || null;
+  $("fileName").textContent = selectedResume
+    ? "Selected: " + selectedResume.name
+    : "";
+  setMessage("analyzeMessage", "");
+});
+
+$("jobSearch").addEventListener("input", renderJobs);
+$("locationFilter").addEventListener("change", renderJobs);
+$("matchFilter").addEventListener("change", renderJobs);
+
+const dropZone = $("dropZone");
+dropZone.addEventListener("dragover", event => {
+  event.preventDefault();
+  dropZone.classList.add("dragover");
+});
+dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
+dropZone.addEventListener("drop", event => {
+  event.preventDefault();
+  dropZone.classList.remove("dragover");
+  const file = event.dataTransfer.files?.[0];
+  if (file) {
+    selectedResume = file;
+    $("fileName").textContent = "Selected: " + file.name;
+    $("resumeFile").value = "";
+    setMessage("analyzeMessage", "");
+  }
+});
+
+/* Restore an existing Supabase session on refresh */
+(async function init() {
+  try {
+    const {data,error} = await supabaseClient.auth.getSession();
+    if (error) throw error;
+    if (data.session?.user) {
+      currentEmail = data.session.user.email || "";
+      showApp(data.session.user);
+    }
+  } catch (error) {
+    console.error("Session restore error:", error);
+    showLogin();
+  }
+
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_IN" && session?.user) {
+      currentEmail = session.user.email || "";
+      showApp(session.user);
+    } else if (event === "SIGNED_OUT") {
+      showLogin();
+    }
+  });
+})();
 </script>
 </body>
 </html>
